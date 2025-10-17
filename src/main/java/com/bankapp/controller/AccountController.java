@@ -3,12 +3,15 @@ package com.bankapp.controller;
 import com.bankapp.dto.AccountRequest;
 import com.bankapp.entity.Account;
 import com.bankapp.service.AccountService;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@Slf4j
 @RestController
 @RequestMapping("/api/accounts")
 public class AccountController {
@@ -20,6 +23,7 @@ public class AccountController {
     @PostMapping
     public ResponseEntity<Account> createAccount(@RequestBody AccountRequest request) {
         Account account = accountService.createAccount(request);
+        log.info("Account created for : {}", request.getAccountHolderName());
         return ResponseEntity.ok(account);
     }
 
@@ -41,6 +45,7 @@ public class AccountController {
     @PutMapping("/{id}")
     public ResponseEntity<Account> updateAccount(@PathVariable Long id, @RequestBody AccountRequest request) {
         Account account = accountService.updateAccount(id, request);
+        log.info("AccountID {} updated!", id);
         return ResponseEntity.ok(account);
     }
 

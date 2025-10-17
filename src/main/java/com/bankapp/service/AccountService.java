@@ -10,9 +10,13 @@ import com.bankapp.entity.Account;
 import com.bankapp.entity.User;
 import com.bankapp.repository.AccountRepository;
 import com.bankapp.repository.UserRepository;
+
+import lombok.extern.slf4j.Slf4j;
+
 import com.bankapp.dto.AccountRequest;
 
 @Service
+@Slf4j
 public class AccountService {
 
     @Autowired
@@ -35,9 +39,14 @@ public class AccountService {
         // Find user by email
         if (request.getEmail() != null && !request.getEmail().isEmpty()) {
             User user = userRepository.findByEmail(request.getEmail())
-                          .orElseThrow(() -> new RuntimeException("User not found with email: " + request.getEmail()));
+                          .orElseThrow(() -> {
+                        	  log.error("User not found with email : {}", request.getEmail());
+                              throw new RuntimeException("User not found with email: " + request.getEmail());
+                          });
+                          
             account.setUser(user);
         } else {
+        	log.error("Account must have a valid email : {}", request.getEmail());
             throw new RuntimeException("Account must have a valid email");
         }
 
@@ -47,7 +56,10 @@ public class AccountService {
     // Get account by ID
     public Account getAccountById(Long id) {
         return accountRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Account not found with id: " + id));
+                .orElseThrow(() -> {
+                	log.error("Account not found with id : {}", id);
+                	throw new RuntimeException("Account not found with id: " + id);
+                });
     }
 
     // Get all accounts
@@ -65,16 +77,21 @@ public class AccountService {
         // Update user by email
         if (request.getEmail() != null && !request.getEmail().isEmpty()) {
             User user = userRepository.findByEmail(request.getEmail())
-                          .orElseThrow(() -> new RuntimeException("User not found with email: " + request.getEmail()));
+                          .orElseThrow(() -> {
+                        	  log.error("User not found with email : {}", request.getEmail());
+                        	  throw new RuntimeException("User not found with email: " + request.getEmail());
+                          });
             account.setUser(user);
         }
-
+        
         return accountRepository.save(account);
+        
     }
 
     // Delete an account
     public void deleteAccount(Long id) {
         Account account = getAccountById(id);
         accountRepository.delete(account);
+        log.info("AccountID - {} deleted!", id);
     }
 }
