@@ -4,6 +4,9 @@ import com.bankapp.entity.Account;
 import com.bankapp.repository.AccountRepository;
 import com.bankapp.service.EmailService;
 import com.bankapp.service.ReportService;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +18,7 @@ import java.util.concurrent.CompletableFuture;
  * Scheduler to generate monthly reports and send emails after completion.
  */
 @Component
+@Slf4j
 public class MonthlyReportScheduler {
 
     private final AccountRepository accountRepo;
@@ -40,6 +44,7 @@ public class MonthlyReportScheduler {
 
         // Trigger async report generation for all accounts
         for (Account account : accounts) {
+        	log.info("Generating report for : {}",account.getAccountHolderName());
             reportFutures.add(reportService.generateReport(account, "PDF"));
         }
 
@@ -47,19 +52,20 @@ public class MonthlyReportScheduler {
         CompletableFuture<Void> allReports = CompletableFuture.allOf(reportFutures.toArray(new CompletableFuture[0]));
 
         allReports.thenRun(() -> {
-            System.out.println("All reports generated. Sending emails...");
+            log.info("All reports generated. Sending emails...");
 
             List<CompletableFuture<Void>> emailFutures = new ArrayList<>();
 
             // Trigger async email sending for all accounts
             for (Account account : accounts) {
+            	log.info("Sending email to : {}",account.getAccountHolderName());
                 emailFutures.add(emailService.sendReportEmail(
                         account.getUser().getEmail(), "MonthlyReport.pdf"));
             }
 
             // Wait for all emails to finish
             CompletableFuture.allOf(emailFutures.toArray(new CompletableFuture[0])).join();
-            System.out.println("All emails sent successfully!");
+            log.info("All emails sent successfully!");
         });
     }
 }
