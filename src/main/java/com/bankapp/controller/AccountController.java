@@ -1,6 +1,7 @@
 package com.bankapp.controller;
 
 import com.bankapp.dto.AccountRequest;
+import com.bankapp.dto.AccountResponse;
 import com.bankapp.entity.Account;
 import com.bankapp.service.AccountService;
 
@@ -21,10 +22,10 @@ public class AccountController {
 
     // Create a new account
     @PostMapping
-    public ResponseEntity<Account> createAccount(@RequestBody AccountRequest request) {
-        Account account = accountService.createAccount(request);
+    public ResponseEntity<AccountResponse> createAccount(@RequestBody AccountRequest request) {
+    	AccountResponse accountResponse = accountService.createAccount(request);
         log.info("Account created for : {}", request.getAccountHolderName());
-        return ResponseEntity.ok(account);
+        return ResponseEntity.ok(accountResponse);
     }
 
     // Get account by ID
