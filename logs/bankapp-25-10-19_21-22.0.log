@@ -1,0 +1,32 @@
+25-10-19 21:22:12.069 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 6.2.5.Final 
+25-10-19 21:22:12.078 [main] INFO  com.bankapp.BankAppApplication - Starting BankAppApplication using Java 1.8.0_202 on LAPTOP-SAE3T7I7 with PID 17216 (C:\Users\niraj\Downloads\BankApp\BankApp\target\classes started by niraj in C:\Users\niraj\Downloads\BankApp\BankApp) 
+25-10-19 21:22:12.079 [main] INFO  com.bankapp.BankAppApplication - No active profile set, falling back to 1 default profile: "default" 
+25-10-19 21:22:12.867 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode. 
+25-10-19 21:22:12.942 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 62 ms. Found 3 JPA repository interfaces. 
+25-10-19 21:22:13.898 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8081 (http) 
+25-10-19 21:22:13.910 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"] 
+25-10-19 21:22:13.911 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat] 
+25-10-19 21:22:13.912 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.75] 
+25-10-19 21:22:14.059 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext 
+25-10-19 21:22:14.060 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1925 ms 
+25-10-19 21:22:14.296 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default] 
+25-10-19 21:22:14.350 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.6.15.Final 
+25-10-19 21:22:14.531 [main] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final} 
+25-10-19 21:22:14.640 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting... 
+25-10-19 21:22:15.117 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed. 
+25-10-19 21:22:15.148 [main] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.Oracle10gDialect 
+25-10-19 21:22:16.308 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform] 
+25-10-19 21:22:16.319 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default' 
+25-10-19 21:22:17.076 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@77204651, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@51cca357, org.springframework.security.web.context.SecurityContextPersistenceFilter@16f34376, org.springframework.security.web.header.HeaderWriterFilter@39f4a7c4, org.springframework.security.web.authentication.logout.LogoutFilter@32a4ea4e, com.bankapp.util.JwtFilter@308a9264, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@43756cb, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1a336906, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3a9c11fb, org.springframework.security.web.session.SessionManagementFilter@1d9af731, org.springframework.security.web.access.ExceptionTranslationFilter@578b2dec, org.springframework.security.web.access.intercept.AuthorizationFilter@72a33316] 
+25-10-19 21:22:17.141 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning 
+25-10-19 21:22:17.595 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"] 
+25-10-19 21:22:17.618 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8081 (http) with context path '' 
+25-10-19 21:22:17.638 [main] INFO  com.bankapp.BankAppApplication - Started BankAppApplication in 5.938 seconds (JVM running for 6.423) 
+25-10-19 21:22:25.784 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet' 
+25-10-19 21:22:25.785 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet' 
+25-10-19 21:22:25.786 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms 
+25-10-19 21:22:26.248 [http-nio-8081-exec-1] WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Error: 1, SQLState: 23000 
+25-10-19 21:22:26.248 [http-nio-8081-exec-1] ERROR o.h.e.jdbc.spi.SqlExceptionHelper - ORA-00001: unique constraint (SYSTEM.UK_6DOTKOTT2KJSP8VW4D0M25FB7) violated
+ 
+25-10-19 21:22:26.251 [http-nio-8081-exec-1] INFO  o.h.e.j.b.internal.AbstractBatchImpl - HHH000010: On release of batch it still contained JDBC statements 
+25-10-19 21:22:48.948 [http-nio-8081-exec-4] INFO  com.bankapp.service.UserService - UserID 3 registered 

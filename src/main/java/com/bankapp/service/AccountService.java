@@ -6,14 +6,15 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bankapp.dto.AccountRequest;
+import com.bankapp.dto.AccountResponse;
 import com.bankapp.entity.Account;
 import com.bankapp.entity.User;
+import com.bankapp.mapper.AccountMapper;
 import com.bankapp.repository.AccountRepository;
 import com.bankapp.repository.UserRepository;
 
 import lombok.extern.slf4j.Slf4j;
-
-import com.bankapp.dto.AccountRequest;
 
 @Service
 @Slf4j
@@ -24,9 +25,12 @@ public class AccountService {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private AccountMapper accountMapper;
 
     // Create a new account from DTO
-    public Account createAccount(AccountRequest request) {
+    public AccountResponse createAccount(AccountRequest request) {
         Account account = new Account();
 
         // Set account holder name and balance
@@ -49,8 +53,14 @@ public class AccountService {
         	log.error("Account must have a valid email : {}", request.getEmail());
             throw new RuntimeException("Account must have a valid email");
         }
-
-        return accountRepository.save(account);
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> {
+      	  log.error("User not found with email : {}", request.getEmail());
+          throw new RuntimeException("User not found with email: " + request.getEmail());
+      });
+        accountRepository.save(account);
+        AccountResponse accountResponse = accountMapper.mapAccountAndUserToAccountResponse(account,user);
+        log.info("Email {}",account.getUser().getEmail());
+        return accountResponse;
     }
 
     // Get account by ID

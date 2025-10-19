@@ -26,7 +26,7 @@ public class Account {
 
     private double balance;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false) // Ensure every account is linked to a user
     private User user;
 }
