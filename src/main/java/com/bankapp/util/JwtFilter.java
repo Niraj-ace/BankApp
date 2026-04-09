@@ -1,18 +1,19 @@
 package com.bankapp.util;
 
-import com.bankapp.service.UserService;
-import io.jsonwebtoken.Claims;
+import java.io.IOException;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import com.bankapp.service.UserService;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -34,27 +35,17 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
+            String username = jwtUtil.getUsernameFromToken(token);
 
-            try {
-                // ✅ Validate the token using JwtUtil
-                if (jwtUtil.validateToken(token)) {
-                    Claims claims = jwtUtil.getClaims(token);
-                    String username = claims.getSubject();
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = userService.loadUserByUsername(username);
 
-                    if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                        UserDetails userDetails = userService.loadUserByUsername(username);
-
-                        // ✅ Create authentication token with authorities
-                        UsernamePasswordAuthenticationToken authToken =
-                                new UsernamePasswordAuthenticationToken(
-                                        userDetails, null, userDetails.getAuthorities());
-
-                        SecurityContextHolder.getContext().setAuthentication(authToken);
-                    }
+                if (jwtUtil.validateToken(token, userDetails)) { // ✅ use new validation
+                    UsernamePasswordAuthenticationToken authToken =
+                            new UsernamePasswordAuthenticationToken(
+                                    userDetails, null, userDetails.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
-            } catch (Exception e) {
-                // You can log invalid token info here if needed
-                // e.g., log.warn("Invalid JWT: {}", e.getMessage());
             }
         }
 

@@ -21,11 +21,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleAccountNotFound(AccountNotFoundException ex) {
         return buildResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
-
+    
     @ExceptionHandler(InsufficientBalanceException.class)
-    public ResponseEntity<?> handleInsufficientBalance(InsufficientBalanceException ex) {
-        return buildResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
-    }
+    public ResponseEntity<?> handleInsufficientFunds(InsufficientBalanceException ex) {
+		return buildResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
+	}
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGeneralException(Exception ex) {

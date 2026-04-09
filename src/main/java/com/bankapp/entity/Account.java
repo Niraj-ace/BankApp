@@ -22,11 +22,11 @@ public class Account {
     private String accountNumber;
 
     @Column(nullable = false)
-    private String accountHolderName; // Added field for the account holder's name
+    private String accountHolderName;
 
     private double balance;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false) // Ensure every account is linked to a user
     private User user;
 }

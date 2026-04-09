@@ -1,14 +1,23 @@
 package com.bankapp.util;
 
-import com.bankapp.entity.User;
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;
-import java.util.Date;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtUtil {
@@ -36,10 +45,13 @@ public class JwtUtil {
     }
 
     // Generate JWT token
-    public String generateToken(User user) {
+    public String generateToken(UserDetails userDetails) {
         return Jwts.builder()
-                .setSubject(user.getUsername())
-                .claim("role", user.getRole().name())
+                .setSubject(userDetails.getUsername())
+                .claim("roles", userDetails.getAuthorities()
+                        .stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .collect(Collectors.toList()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .setIssuer("BankApp")
@@ -48,16 +60,17 @@ public class JwtUtil {
     }
 
     // Validate the token (check signature + expiration)
-    public boolean validateToken(String token) {
+    public boolean validateToken(String token, UserDetails userDetails) {
         try {
-            Jwts.parserBuilder()
-                    .setSigningKey(getSigningKey())
-                    .build()
-                    .parseClaimsJws(token);
-            return true;
+            final String username = getUsernameFromToken(token);
+            return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
         } catch (JwtException | IllegalArgumentException e) {
-            return false; // token expired, malformed, or invalid
+            return false;
         }
+    }
+
+    private boolean isTokenExpired(String token) {
+        return getClaims(token).getExpiration().before(new Date());
     }
 
     // Extract all claims
@@ -75,7 +88,15 @@ public class JwtUtil {
     }
 
     // Extract role
-    public String getRoleFromToken(String token) {
-        return getClaims(token).get("role", String.class);
+    public List<String> getRolesFromToken(String token) {
+        Object roles = getClaims(token).get("roles");
+
+        if (roles instanceof List<?>) {
+            return ((List<?>) roles).stream()
+                    .map(Object::toString)
+                    .collect(Collectors.toList());
+        }
+
+        return Collections.emptyList(); // fallback
     }
 }

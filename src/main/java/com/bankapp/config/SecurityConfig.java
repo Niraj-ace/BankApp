@@ -1,7 +1,5 @@
 package com.bankapp.config;
 
-import com.bankapp.service.UserService;
-import com.bankapp.util.JwtFilter;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.annotation.Bean;
@@ -10,11 +8,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.bankapp.service.UserService;
+import com.bankapp.util.JwtFilter;
 
 @Configuration
 public class SecurityConfig {
@@ -29,8 +29,7 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authManager(HttpSecurity http, UserService userService) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .userDetailsService(username -> userService.findByUsername(username)
-                        .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username)))
+                .userDetailsService(userService)
                 .passwordEncoder(passwordEncoder())
                 .and()
                 .build();

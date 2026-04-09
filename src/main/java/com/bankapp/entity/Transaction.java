@@ -32,15 +32,11 @@ public class Transaction {
     @Builder.Default
     private LocalDateTime timestamp = LocalDateTime.now();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
 
     public enum Type {
         DEPOSIT, WITHDRAW, TRANSFER
-    }
-
-    public enum Category {
-        FOOD, TRAVEL, UTILITIES, OTHERS
     }
 }
