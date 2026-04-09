@@ -1,8 +1,5 @@
 package com.bankapp.service;
 
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,15 +18,16 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class UserService implements UserDetailsService{
 
-    private final UserRepository userRepository;
+	private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    @Autowired
-    private UserMapper usermapper;
+    private final UserMapper usermapper;
 
     public UserService(UserRepository userRepository,
-                       PasswordEncoder passwordEncoder) {
+                       PasswordEncoder passwordEncoder,
+                       UserMapper usermapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.usermapper = usermapper;
     }
 
     public UserResponseDTO registerUser(UserRequestDTO request) {
@@ -43,10 +41,6 @@ public class UserService implements UserDetailsService{
         UserResponseDTO response = usermapper.mapUserToUserResponsetDTO(user);
         log.info("UserID {} registered", response.getId());
         return response;
-    }
-
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
     }
 
     @Override

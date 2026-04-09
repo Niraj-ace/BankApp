@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+   oracle-db:
+      image: gvenzl/oracle-xe:21-slim
+      container_name: oracle-db
+      ports:
+         - "1521:1521"
+         
+      environment:
+         ORACLE_PASSWORD: tiger2
+      
+      volumes:
+         - oracle-data:/opt/oracle/oradata
+   
+   bankapp:
+      image: nirajsaitama/bankapp-springboot:1.1
+      container_name: bankapp
+      ports:
+        - "8081:8081"
+      depends_on:
+        - oracle-db
+      restart: always
+        
+      environment:
+         SPRING_DATASOURCE_URL: jdbc:oracle:thin:@//oracle-db:1521/XEPDB1
+         SPRING_DATASOURCE_USERNAME: system
+         SPRING_DATASOURCE_PASSWORD: tiger2
+         SPRING_DATASOURCE_DRIVER_CLASS_NAME: oracle.jdbc.OracleDriver
+         SPRING_JPA_HIBERNATE_DDL_AUTO: update
+         JWT_SECRET: b8fFzXrE7sW9tY2vQ1uK9rM5cT8hN0aPvQ7yXrD4eP9zW3uL2nK5sT6rQ9aY0xNc
+         JWT_EXPIRATION: 864000000
+         
+volumes:
+   oracle-data:

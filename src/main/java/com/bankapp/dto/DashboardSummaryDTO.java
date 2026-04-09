@@ -1,5 +1,7 @@
 package com.bankapp.dto;
 
+import com.bankapp.entity.Category;
+
 import lombok.*;
 
 @Getter
@@ -12,6 +14,6 @@ public class DashboardSummaryDTO {
     private double totalDeposits;
     private double totalWithdrawals;
     private double currentBalance;
-    private String topCategory;
+    private Category topCategory;
 
 }

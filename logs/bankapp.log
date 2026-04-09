@@ -1,2 +1,0 @@
-25-10-19 21:30:13.102 [http-nio-8081-exec-10] INFO  com.bankapp.service.AccountService - Email john@example1.com 
-25-10-19 21:30:13.106 [http-nio-8081-exec-10] INFO  c.b.controller.AccountController - Account created for : John Doe 
