@@ -12,6 +12,7 @@ public class BankAppApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(BankAppApplication.class, args);
 		log.info("BankAppApplication started successfully.");
+		log.info("Added jenkins docker automation");
 	}
 
 }
